@@ -37,6 +37,7 @@ def index(request):
         student = FirstForm()  
         return render(request,"index.html",{'form':student})
 
+
 @csrf_exempt
 def readDocx(request):
     if request.method == 'POST':
