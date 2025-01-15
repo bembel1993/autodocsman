@@ -26,8 +26,9 @@ def index(request):
                                 # for cell in row.cells:
                                 #     text = cell.text.strip()
                                 text = (cell.text for cell in row.cells)
-                                row_data = tuple(text) # кортеж
-                                full_text.append(row_data)
+                                if 'Место проведения испытаний:' in text: # search data by name of first cell
+                                    row_data = tuple(text) # кортеж
+                                    full_text.append(row_data)
                             text_document = full_text
                     context = {'array_name_files': name_files,
                                'text_document': text_document}
