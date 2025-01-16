@@ -13,7 +13,8 @@ def index(request):
         student = FirstForm(request.POST, request.FILES)
         name_files = []
         name_files.append(request.FILES)
-        full_text = []
+        mark_comm_name_type = ''
+        test_place = ''
         # row_data = []
         if student.is_valid():
             for qty_file in request.FILES.keys():
@@ -23,16 +24,30 @@ def index(request):
                         for i, table_count in enumerate(document.tables):
                             table = document.tables[i]
                             for x, row in enumerate(table.rows):
-                                # for cell in row.cells:
-                                #     text = cell.text.strip()
-                                text = (cell.text for cell in row.cells)
-                                if 'Место проведения испытаний:' in text: # search data by name of first cell
-                                    row_data = tuple(text) # кортеж
-                                    full_text.append(row_data)
-                            text_document = full_text
+                                for c, cell in enumerate(row.cells):
+                                    text = cell.text.strip()
+                                    if '1.1 Марка, коммерческое наименование, тип' in text:
+                                        if c + 1 < len(row.cells):
+                                            text1 = row.cells[c+1].text.strip()
+                                        mark_comm_name_type = text1
+                                    if 'Место проведения испытаний:' in text:
+                                        if c + 1 < len(row.cells):
+                                            text2 = row.cells[c+1].text.strip()
+                                        test_place = text2
+                            mcnt = mark_comm_name_type
+                            tp = test_place
                     context = {'array_name_files': name_files,
-                               'text_document': text_document}
+                               'mcnt': mcnt,
+                               'tp': tp}
                     return render(request, 'index.html', context)
+                                # text = (cell.text.strip() for cell in row.cells)
+                                # if 'Место проведения испытаний:' in text: # search data by name of first cell
+                                #     row_data = tuple(text) # кортеж
+                                #     full_text.append(row_data)
+                            # text_document = full_text
+                    # context = {'array_name_files': name_files,
+                    #            'text_document': text_document}
+                    # return render(request, 'index.html', context)
             # return HttpResponse("File uploaded successfuly")  
     else:  
         student = FirstForm()  
