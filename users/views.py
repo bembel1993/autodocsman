@@ -1,3 +1,4 @@
+import re
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
@@ -26,11 +27,11 @@ def index(request):
                             for x, row in enumerate(table.rows):
                                 for c, cell in enumerate(row.cells):
                                     text = cell.text.strip()
-                                    if '1.1 Марка, коммерческое наименование, тип' in text:
+                                    if re.search("Марка", text): #in text:
                                         if c + 1 < len(row.cells):
                                             text1 = row.cells[c+1].text.strip()
                                         mark_comm_name_type = text1
-                                    if 'Место проведения испытаний:' in text:
+                                    if re.search("Место проведения", text):
                                         if c + 1 < len(row.cells):
                                             text2 = row.cells[c+1].text.strip()
                                         test_place = text2
